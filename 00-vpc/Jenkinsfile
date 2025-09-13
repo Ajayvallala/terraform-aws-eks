@@ -1,0 +1,55 @@
+pipeline{
+    agent{
+        label 'AGENT-1'
+    }
+    options {
+        ansiColor('xterm')
+    }
+    stages{
+        stage('Init'){
+            steps{
+                withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                 script{
+                    sh """
+                    cd 00-vpc
+                    terraform init --reconfigure
+                    """
+                  }
+                }
+               
+            }
+        }
+
+        stage('Plan'){
+            steps{
+                withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                 script{
+                    sh """
+                    cd 00-vpc
+                    terraform plan
+                    """
+                  }
+                }
+               
+            }
+        }
+
+        stage('Apply'){
+            input{
+                message 'Should we continue?'
+                ok 'yes we should'
+            }
+            steps{
+                withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                 script{
+                    sh """
+                    cd 00-vpc
+                    terraform apply -auto-approve
+                    """
+                  }
+                }
+               
+            }
+        }
+    }
+}
