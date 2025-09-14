@@ -82,7 +82,7 @@ pipeline{
             }
            
         }
-    stage('Trigger 70-ingress-alb'){
+     stage('Trigger 70-ingress-alb'){
         steps{
             script{
                 build job: '70-ingress-alb'
