@@ -12,7 +12,7 @@ pipeline{
                     script{
                         sh """
                          cd 10-sg
-                         terrafrom init --reconfigure
+                         terraform init --reconfigure
                         """
                     }
 
@@ -25,8 +25,7 @@ pipeline{
                 withAWS(credentials: 'aws-creds', region: 'us-east-1'){
                     script{
                         sh """
-                         cd 10-sg
-                         terrafrom plan
+                         terraform plan
                         """
                     }
 
@@ -39,7 +38,7 @@ pipeline{
                     script{
                         sh """
                          cd 10-sg
-                         terrafrom apply -auto-approve
+                         terraform apply -auto-approve
                         """
                     }
 
