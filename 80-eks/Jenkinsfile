@@ -11,7 +11,7 @@ pipeline{
                 withAWS(credentials: 'aws-creds', region: 'us-east-1'){
                  script{
                     sh """
-                    cd 00-vpc
+                    cd 80-eks
                     terraform init --reconfigure
                     """
                   }
@@ -25,7 +25,7 @@ pipeline{
                 withAWS(credentials: 'aws-creds', region: 'us-east-1'){
                  script{
                     sh """
-                    cd 00-vpc
+                    cd 80-eks
                     terraform plan
                     """
                   }
@@ -35,25 +35,16 @@ pipeline{
         }
 
         stage('Apply'){
-            input{
-                message 'Should we continue?'
-                ok 'yes we should'
-            }
             steps{
                 withAWS(credentials: 'aws-creds', region: 'us-east-1'){
                  script{
                     sh """
-                    cd 00-vpc
+                    cd 80-eks
                     terraform apply -auto-approve
                     """
                   }
                 }
                
-            }
-        }
-        stage('Trigger SG'){
-            steps{
-                 build job: '10-sg', wait: true, propagate: true
             }
         }
     }
